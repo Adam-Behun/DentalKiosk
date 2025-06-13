@@ -1,0 +1,46 @@
+services:
+  mongo:
+    image: mongo:6.0
+    container_name: dental_mongo
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: rootpassword
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+
+  backend:
+    build: ./backend
+    container_name: dental_backend
+    env_file:
+      - ./backend/.env
+    ports:
+      - "4000:4000"
+    depends_on:
+      - mongo
+    command: ["npm", "run", "start"]
+
+  frontend:
+    build:
+      context: ./frontend
+    container_name: dental_frontend
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+    environment:
+      - REACT_APP_BACKEND_URL=http://localhost:4000
+
+  stripe-cli:
+    image: stripe/stripe-cli:latest
+    container_name: stripe_cli
+    entrypoint: ["sh", "-c", "while :; do sleep 2073600; done"]
+    tty: true
+    environment:
+      - STRIPE_API_KEY=Nope
+    volumes:
+      - ./stripe:/root/.config/stripe
+
+volumes:
+  mongo_data:
