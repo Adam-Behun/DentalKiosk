@@ -34,6 +34,8 @@ Welcome to the **Dental Kiosk (MVP)**, application designed to enhance price tra
 - **EDI Clearinghouse Integration**: Real-time deductible insights for enhanced price transparency.
 - **Wait-Time Analytics**: Analyze and optimize office wait times (Wait-time = Check-in - Admission by Staff).
 
+
+<!--
 ## Getting Started
 
 ## Prerequisites
@@ -112,3 +114,5 @@ Shut down the containers:
 ```bash
 docker-compose down
 ```
+</div>
+-->
