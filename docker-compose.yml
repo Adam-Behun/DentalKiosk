@@ -37,8 +37,8 @@ services:
     container_name: stripe_cli
     entrypoint: ["sh", "-c", "while :; do sleep 2073600; done"]
     tty: true
-    environment:
-      - STRIPE_API_KEY=Nope
+    env_file:
+      - ./backend/.env
     volumes:
       - ./stripe:/root/.config/stripe
 

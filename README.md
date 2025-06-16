@@ -1,3 +1,129 @@
-Dental Kiosk MVP - The Idea is to inform the patient of the cost of a visit before they undergo scheduled procedures.
-This MVP is a React application with Multi-factor authentication, MongoDB, and Stripe API for patient check-in and co-payment collection (tool integrates with Dental Practice Management System to see appointments, insurance information, ...). 
-We are planning to explore an EDI Clearinghouse integration that would allow for real-time deductible insights, helping us achieve price transparency, software-controlled co-pay collection, and office wait-time analyses. 
+# Dental Kiosk MVP
+
+Welcome to the **Dental Kiosk MVP**, a modern solution designed to enhance price transparency and streamline patient check-in processes at dental practices. This application informs patients of visit costs before scheduled procedures, integrates with Dental Practice Management Systems, and supports co-payment collection via Stripe. Built with React, Node.js, MongoDB, and Docker, it provides a scalable foundation for dental offices aiming to improve operational efficiency and patient experience.
+
+## Features
+- **Price Transparency**: Displays estimated visit costs based on appointments and insurance data.
+- **Multi-Factor Authentication**: Ensures secure patient and staff access.
+- **Stripe Integration**: Facilitates secure co-payment collection.
+- **MongoDB Backend**: Stores appointment and patient data, with sample records like patient Alice Johnson (DOB: 09-10-1978, balance: $150.00).
+- **Future Roadmap**: Plans for EDI Clearinghouse integration to enable real-time deductible insights, software-controlled co-pay collection, and office wait-time analytics.
+
+## Prerequisites
+- [Docker](https://www.docker.com/get-started) and [Docker Compose](https://docs.docker.com/compose/install/)
+- [Node.js](https://nodejs.org/) (for local development, optional)
+- [Git](https://git-scm.com/) to clone the repository
+
+## Getting Started
+
+### 1. Clone the Repository
+```bash
+git clone https://github.com/Adam-Behun/DentalKiosk.git
+cd DentalKiosk
+```
+
+### 2. Set Up Environment Variables
+Copy the example environment file and configure it with your own credentials:
+```bash
+cp backend/.env.example backend/.env
+```
+Edit `backend/.env` with your values:
+- **MongoDB URI**: Use the default `mongodb://root:rootpassword@mongo:27017/dental?authSource=admin` for Docker.
+- **Email Settings**: Provide your SMTP host, port, user, and app-specific password (e.g., Gmail app password).
+- **Stripe Keys**: Obtain your `STRIPE_SECRET_KEY` and `STRIPE_WEBHOOK_SECRET` from the [Stripe Dashboard](https://dashboard.stripe.com/test/apikeys).
+
+Example `backend/.env`:
+```bash
+PORT=4000
+MONGO_URI=mongodb://root:rootpassword@mongo:27017/dental?authSource=admin
+EMAIL_HOST=smtp.gmail.com
+EMAIL_PORT=587
+EMAIL_USER=your_email@gmail.com
+EMAIL_PASS=your_email_app_password
+STRIPE_SECRET_KEY=your_stripe_secret_key
+STRIPE_WEBHOOK_SECRET=your_stripe_webhook_secret
+```
+
+### 3. Build and Run with Docker
+Start the application using Docker Compose:
+```bash
+docker-compose up --build -d
+```
+- **Frontend**: Access at [http://localhost:3000](http://localhost:3000)
+- **Backend**: Access at [http://localhost:4000](http://localhost:4000)
+- Check running containers:
+```bash
+docker-compose ps
+```
+
+### 4. Populate the Database
+Run the database population script:
+```bash
+docker exec -it dental_backend node utils/populateDatabase.js
+```
+
+### 5. Test Payment with Stripe
+Use the following test card for Stripe payments:
+- **Card Number**: 4242 4242 4242 4242
+- **Expiration**: 12/34
+- **CVC**: Any 3-digit number
+
+### 6. Log In to MongoDB
+Access the MongoDB instance to verify data:
+```bash
+docker exec -it dental_mongo mongosh
+```
+Inside the Mongo shell:
+```javascript
+use admin
+db.auth('root', 'rootpassword')
+use dental
+db.appointments.find()
+show collections
+exit
+```
+Example appointment record:
+```json
+{
+  _id: ObjectId('678bdf6eba69b819f1e8a36c'),
+  patientFirstName: 'Alice',
+  patientLastName: 'Johnson',
+  doctorName: 'Brown',
+  date: '2025-01-18',
+  time: '11:00 AM',
+  dateOfBirth: '1978-09-10',
+  patientBalance: '150.00',
+  __v: 0
+}
+```
+
+### 7. Stop the Application
+Shut down the containers:
+```bash
+docker-compose down
+```
+
+### 8. Clean Up Ports (if needed)
+If ports 3000 or 4000 are in use:
+```bash
+netstat -ano | findstr :4000
+taskkill //PID <PID> //F
+```
+Repeat for port 3000 if necessary.
+
+## Testing with Sample Patient
+Use the following patient details for testing:
+- **Name**: Alice Johnson (AJ)
+- **Date of Birth**: 09-10-1978
+
+## Architecture
+- **Frontend**: React application served via Nginx, running on port 3000.
+- **Backend**: Node.js API connected to MongoDB, running on port 4000.
+- **Database**: MongoDB 6.0, running on port 27017.
+- **Payment**: Stripe CLI for testing payment workflows.
+- **Containerization**: Docker with multi-stage builds for efficient deployment.
+
+## Future Enhancements
+- **EDI Clearinghouse Integration**: Real-time deductible insights for enhanced price transparency.
+- **Wait-Time Analytics**: Analyze and optimize office wait times.
+- **Expanded Integrations**: Deeper compatibility with Dental Practice Management Systems.
