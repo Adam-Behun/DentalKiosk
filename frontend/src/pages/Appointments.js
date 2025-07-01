@@ -158,7 +158,7 @@ const Appointments = () => {
   <div className="widget-wrapper">
     {/* Logo */}
     <div className="logo-container">
-      <img src="/logo.png" alt="Dental Kiosk Logo" className="logo" />
+      <img src="/other-logo.png" alt="Dental Kiosk Logo" className="logo" />
     </div>
 
     {/* Central Widget */}

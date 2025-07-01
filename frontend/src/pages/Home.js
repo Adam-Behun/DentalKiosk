@@ -7,7 +7,7 @@ const Home = () => {
     <div className="main-container">
       <div className="widget-wrapper"> 
         <div className="logo-container">
-          <img src="/logo.png" alt="Dental Kiosk Logo" className="logo" />
+          <img src="/other-logo.png" alt="Dental Kiosk Logo" className="logo" />
         </div>
         <div className="central-widget">
           <h1 className="widget-title">Welcome to the Dental Kiosk</h1>
