@@ -7,7 +7,11 @@ const Home = () => {
     <div className="main-container">
       <div className="widget-wrapper"> 
         <div className="logo-container">
-          <img src="/image.jpg" alt="Dental Kiosk Logo" className="logo" />
+          <div className="logo">
+            <span style={{fontSize: '2em', fontWeight: 'bold', color: 'var(--secondary-color)'}}>
+              Dental Kiosk
+            </span>
+          </div>
         </div>
         <div className="central-widget">
           <h1 className="widget-title">Welcome to the Dental Kiosk</h1>
