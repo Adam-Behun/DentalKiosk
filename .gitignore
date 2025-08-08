@@ -46,12 +46,11 @@ jspm_packages/
 # Yarn Integrity file
 .yarn-integrity
 
-# dotenv environment variables file
-.env
-
-# Build output
+# Build output - CRITICAL: Prevents build artifacts from being committed
 dist/
 build/
+frontend/build/
+frontend/dist/
 
 # OS generated files
 .DS_Store
@@ -89,3 +88,29 @@ temp/
 # Backup files
 *.bak
 *.backup
+
+# React specific
+.eslintcache
+
+# Testing
+/coverage
+
+# Miscellaneous
+.cache/
+.parcel-cache/
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Docker volumes
+docker-volumes/
+
+# Local development files
+.local
