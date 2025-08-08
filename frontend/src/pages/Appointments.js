@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate, useLocation } from 'react-router-dom';
 import '../styles/style-guide.css';
+import API_BASE_URL from '../config/api';
 
 const Appointments = () => {
   const [appointments, setAppointments] = useState([]);
@@ -31,7 +32,7 @@ const Appointments = () => {
   useEffect(() => {
     const fetchAppointments = async () => {
       try {
-        const response = await axios.get('/api/appointments/today');
+        const response = await axios.get(`${API_BASE_URL}/api/appointments/today`);
         // Only show those that have not been checked in (checkedIn === 0)
         setAppointments(response.data.filter((appt) => appt.checkedIn === 0));
       } catch (error) {
@@ -67,7 +68,7 @@ const Appointments = () => {
     }
 
     try {
-      await axios.post('/api/appointments/mfa/request', { email });
+      await axios.post(`${API_BASE_URL}/api/appointments/mfa/request`, { email });
       alert('MFA code sent to your email!');
       setStep('mfa');
     } catch (error) {
@@ -78,7 +79,7 @@ const Appointments = () => {
 
   const handleCheckIn = async () => {
     try {
-      const response = await axios.post('/api/appointments/mfa/verify', {
+      const response = await axios.post(`${API_BASE_URL}/api/appointments/mfa/verify`, {
         email,
         code: mfaCode,
       });
@@ -92,7 +93,7 @@ const Appointments = () => {
         };
 
         // Update the database
-        await axios.patch(`/api/appointments/${selectedAppointment._id}`, updatedAppointment);
+        await axios.patch(`${API_BASE_URL}/api/appointments/${selectedAppointment._id}`, updatedAppointment);
 
         // Go to "menu" step, regardless of balance
         setStep('menu');
@@ -116,7 +117,7 @@ const Appointments = () => {
       localStorage.setItem('selectedAppointment', JSON.stringify(selectedAppointment));
 
       // Call backend to create a payment session (Stripe, Square, etc.)
-      const response = await axios.post('/api/checkout/create-checkout-session', {
+      const response = await axios.post(`${API_BASE_URL}/api/checkout/create-checkout-session`, {
         appointmentId: selectedAppointment._id,
       });
       // Redirect user to the payment page
@@ -127,7 +128,7 @@ const Appointments = () => {
     }
   };
 
-  // If user refreshes after returning from payment, restore the selected appointment
+
   useEffect(() => {
     const savedAppointment = localStorage.getItem('selectedAppointment');
     if (savedAppointment) {
@@ -135,14 +136,11 @@ const Appointments = () => {
     }
   }, []);
 
-  // If we've got some info that user has paid, or they come back from payment,
-  // we might want to re-check the backend for updated balance. Example:
   useEffect(() => {
     if (paid && selectedAppointment) {
-      // Optionally fetch new updated balance from the server:
-      // (This depends on how you’re updating the appointment after payment.)
+
       axios
-        .get(`/api/appointments/${selectedAppointment._id}`)
+        .get(`${API_BASE_URL}/api/appointments/${selectedAppointment._id}`)
         .then((res) => {
           setSelectedAppointment(res.data); // updated appointment
         })
@@ -150,63 +148,61 @@ const Appointments = () => {
     }
   }, [paid, selectedAppointment]);
 
-  // When leaving the kiosk, or finishing, you might want to clear local storage
-  // but that depends on how you want your kiosk flow to work.
 
   return (
-<div className="main-container">
-  <div className="widget-wrapper">
-    {/* Logo */}
-    <div className="logo-container">
-      <img src="/image.jpg" alt="Dental Kiosk Logo" className="logo" />
-    </div>
+    <div className="main-container">
+      <div className="widget-wrapper">
+        {/* Logo */}
+        <div className="logo-container">
+          <img src="/image.jpg" alt="Dental Kiosk Logo" className="logo" />
+        </div>
 
-    {/* Central Widget */}
-    <div className="central-widget">
-      {/* STEP: list */}
-      {step === 'list' && (
-        <>
-          <h1 className="widget-title">Today's Appointments</h1>
-          <p className="widget-content">
-            To check in, find your appointment using your initials, doctor, and time, then click on your row.
-          </p>
-          {loading ? (
-            <p>Loading...</p>
-          ) : (
-            <table className="appointment-table">
-              <thead>
-                <tr>
-                  <th>Appointment Time</th>
-                  <th>Initials</th>
-                  <th>Doctor</th>
-                </tr>
-              </thead>
-              <tbody>
-                {appointments.map((appointment) => (
-                  <tr
-                    key={appointment._id}
-                    className="appointment-row"
-                    onClick={() => handleRowClick(appointment)}
-                  >
-                    <td>
-                      {new Date(`${appointment.date} ${appointment.time}`).toLocaleTimeString([], {
-                        hour: '2-digit',
-                        minute: '2-digit',
-                      })}
-                    </td>
-                    <td>{getInitials(appointment.patientFirstName, appointment.patientLastName)}</td>
-                    <td>
-                      {appointment.doctorName.startsWith('Dr.')
-                        ? appointment.doctorName
-                        : `Dr. ${appointment.doctorName}`}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+        {/* Central Widget */}
+        <div className="central-widget">
+          {/* STEP: list */}
+          {step === 'list' && (
+            <>
+              <h1 className="widget-title">Today's Appointments</h1>
+              <p className="widget-content">
+                To check in, find your appointment using your initials, doctor, and time, then click on your row.
+              </p>
+              {loading ? (
+                <p>Loading...</p>
+              ) : (
+                <table className="appointment-table">
+                  <thead>
+                    <tr>
+                      <th>Appointment Time</th>
+                      <th>Initials</th>
+                      <th>Doctor</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {appointments.map((appointment) => (
+                      <tr
+                        key={appointment._id}
+                        className="appointment-row"
+                        onClick={() => handleRowClick(appointment)}
+                      >
+                        <td>
+                          {new Date(`${appointment.date} ${appointment.time}`).toLocaleTimeString([], {
+                            hour: '2-digit',
+                            minute: '2-digit',
+                          })}
+                        </td>
+                        <td>{getInitials(appointment.patientFirstName, appointment.patientLastName)}</td>
+                        <td>
+                          {appointment.doctorName.startsWith('Dr.')
+                            ? appointment.doctorName
+                            : `Dr. ${appointment.doctorName}`}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              )}
+            </>
           )}
-        </>
-      )}
 
           {/* STEP: dob */}
           {step === 'dob' && (
@@ -316,6 +312,5 @@ const Appointments = () => {
       </div>
     </div>
   );
-};
-
+}
 export default Appointments;
