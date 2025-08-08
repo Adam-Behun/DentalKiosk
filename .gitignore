@@ -1,55 +1,91 @@
-
-# dependencies
-/.pnp
-.pnp.js
+# Dependencies
 node_modules/
-frontend/node_modules/
-frontend/build/static/js/*.js
-# build output
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+package-lock.json
 
-*.txt
-node_modules/
-dist/
+# Special folders
+dental-kiosk/
+stripe/
+
+# Environment variables
 .env
-.DS_Store
-*.png
-*.toml
-
-# testing
-/coverage
-
-# production
-/build
-
-# misc
-.DS_Store
 .env.local
 .env.development.local
 .env.test.local
 .env.production.local
 
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
+# Logs
+logs/
+*.log
 
-# dependencies
-/node_modules
-/.pnp
-.pnp.js
+# Runtime data
+pids/
+*.pid
+*.seed
+*.pid.lock
 
-# testing
-/coverage
+# Coverage directory used by tools like istanbul
+coverage/
+.nyc_output/
 
-# production
-/build
+# Dependency directories
+node_modules/
+jspm_packages/
 
-# misc
+# Optional npm cache directory
+.npm
+
+# Optional REPL history
+.node_repl_history
+
+# Output of 'npm pack'
+*.tgz
+
+# Yarn Integrity file
+.yarn-integrity
+
+# dotenv environment variables file
+.env
+
+# Build output
+dist/
+build/
+
+# OS generated files
 .DS_Store
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
 
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Database files (if using local SQLite)
+*.sqlite
+*.sqlite3
+*.db
+
+# Docker
+.dockerignore
+
+# Temporary files
+tmp/
+temp/
+
+# SSL certificates (if any)
+*.pem
+*.key
+*.crt
+
+# Backup files
+*.bak
+*.backup
