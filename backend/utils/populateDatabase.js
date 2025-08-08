@@ -4,46 +4,51 @@ const mongoose = require('mongoose');
 const Appointment = require('../models/Appointment');
 require('dotenv').config();
 
+// Get today's date in Railway's timezone (UTC)
+const getTodayDate = () => {
+  return new Date().toISOString().split('T')[0];
+};
+
 const sampleAppointments = [
   {
     patientFirstName: 'John',
     patientLastName: 'Doe',
     doctorName: 'Smith',
-    date: new Date().toISOString().split('T')[0],
+    date: getTodayDate(),
     time: '09:00 AM',
     dateOfBirth: '1990-01-01',
     patientBalance: '50.00',
-    checkedIn: 0, // Default value
+    checkedIn: 0,
   },
   {
     patientFirstName: 'Jane',
     patientLastName: 'Doe',
     doctorName: 'Smith',
-    date: new Date().toISOString().split('T')[0],
+    date: getTodayDate(),
     time: '10:00 AM',
     dateOfBirth: '1985-05-15',
     patientBalance: '0.00',
-    checkedIn: 0, // Default value
+    checkedIn: 0,
   },
   {
     patientFirstName: 'Alice',
     patientLastName: 'Johnson',
     doctorName: 'Brown',
-    date: new Date().toISOString().split('T')[0],
+    date: getTodayDate(),
     time: '11:00 AM',
     dateOfBirth: '1978-09-10',
     patientBalance: '150.00',
-    checkedIn: 0, // Default value
+    checkedIn: 0,
   },
   {
     patientFirstName: 'Bob',
     patientLastName: 'Williams',
     doctorName: 'Brown',
-    date: new Date().toISOString().split('T')[0],
+    date: getTodayDate(),
     time: '01:00 PM',
     dateOfBirth: '1992-12-20',
     patientBalance: '25.50',
-    checkedIn: 0, // Default value
+    checkedIn: 0,
   },
 ];
 

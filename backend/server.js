@@ -27,6 +27,7 @@ app.use('/api/checkout', checkoutRoutes);
 app.use('/webhook', webhookRoutes);
 
 // Mongo + Server setup
+// Railway provides PORT automatically, fallback to 4000 for local dev
 const PORT = process.env.PORT || 4000;
 
 // Retry mechanism for MongoDB connection
@@ -37,7 +38,7 @@ mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopol
     // Populate the database if needed
     await populateDatabase();
 
-    app.listen(PORT, () => console.log(`Backend running on port ${PORT}`));
+    app.listen(PORT, '0.0.0.0', () => console.log(`Backend running on port ${PORT}`));
   })
   .catch((err) => {
     console.error('Error connecting to MongoDB:', err);
