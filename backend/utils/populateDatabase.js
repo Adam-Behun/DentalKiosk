@@ -37,7 +37,7 @@ const createSampleAppointments = () => {
       date: today,
       time: '10:00 AM',
       dateOfBirth: '1990-01-01',
-      patientBalance: '0.00',
+      patientBalance: '200.00',
       checkedIn: 0,
     },
     {
