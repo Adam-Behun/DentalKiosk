@@ -19,7 +19,7 @@ const createSampleAppointments = () => {
   const tomorrowStr = tomorrow.toISOString().split('T')[0];
 
   return [
-    // Today's appointments
+    // Today's appointments - ALL with DOB 1990-01-01 for demo consistency
     {
       patientFirstName: 'John',
       patientLastName: 'Doe',
@@ -36,7 +36,7 @@ const createSampleAppointments = () => {
       doctorName: 'Smith',
       date: today,
       time: '10:00 AM',
-      dateOfBirth: '1985-05-15',
+      dateOfBirth: '1990-01-01',
       patientBalance: '0.00',
       checkedIn: 0,
     },
@@ -46,7 +46,7 @@ const createSampleAppointments = () => {
       doctorName: 'Brown',
       date: today,
       time: '11:00 AM',
-      dateOfBirth: '1978-09-10',
+      dateOfBirth: '1990-01-01',
       patientBalance: '150.00',
       checkedIn: 0,
     },
@@ -56,18 +56,18 @@ const createSampleAppointments = () => {
       doctorName: 'Brown',
       date: today,
       time: '01:00 PM',
-      dateOfBirth: '1992-12-20',
+      dateOfBirth: '1990-01-01',
       patientBalance: '25.50',
       checkedIn: 0,
     },
-    // Tomorrow's appointments (backup)
+    // Tomorrow's appointments (backup) - also with consistent DOB
     {
       patientFirstName: 'Sarah',
       patientLastName: 'Miller',
       doctorName: 'Johnson',
       date: tomorrowStr,
       time: '09:30 AM',
-      dateOfBirth: '1988-03-15',
+      dateOfBirth: '1990-01-01',
       patientBalance: '75.00',
       checkedIn: 0,
     },
@@ -77,7 +77,7 @@ const createSampleAppointments = () => {
       doctorName: 'Johnson',
       date: tomorrowStr,
       time: '02:00 PM',
-      dateOfBirth: '1995-07-22',
+      dateOfBirth: '1990-01-01',
       patientBalance: '120.00',
       checkedIn: 0,
     }

@@ -212,6 +212,9 @@ const Appointments = () => {
           {step === 'dob' && (
             <>
               <h1 className="widget-title">Please, confirm your Date of Birth</h1>
+              <p className="widget-content" style={{fontSize: '0.9rem', color: 'var(--neutral-text)', fontStyle: 'italic'}}>
+                For demo purposes, all patients DOB is set to 01/01/1990
+              </p>
               <div className="input-container">
                 <input
                   type="date"
