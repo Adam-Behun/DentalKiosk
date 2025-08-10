@@ -161,18 +161,26 @@ textarea:focus {
     transform: scale(1.05);
 }
 
+/* Table Container for Scrolling */
+.table-container {
+    max-height: 300px; /* Limit height for scrolling */
+    overflow-y: auto; /* Enable vertical scrolling */
+    margin: 20px 0;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+}
+
 /* Appointment Table */
 .appointment-table {
     width: 100%;
     border-collapse: collapse;
-    margin: 20px 0;
     table-layout: fixed; /* Forces columns to share equal width */
 }
 
 .appointment-table th,
 .appointment-table td {
     border: 1px solid #ddd;
-    padding: 8px;
+    padding: 10px;
     text-align: center;
     width: 33.33%; /* Three columns => ~33.33% each */
 }
@@ -181,6 +189,9 @@ textarea:focus {
     background-color: var(--primary-color);
     color: var(--light-color);
     font-weight: 600;
+    position: sticky; /* Keep header visible when scrolling */
+    top: 0;
+    z-index: 10;
 }
 
 .appointment-table tr {
@@ -196,7 +207,26 @@ textarea:focus {
 }
 
 .appointment-row:hover {
-    background-color: #32b8a4;
+    background-color: rgba(50, 184, 164, 0.3);
+}
+
+/* Scrollbar Styling (optional, for better appearance) */
+.table-container::-webkit-scrollbar {
+    width: 8px;
+}
+
+.table-container::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 8px;
+}
+
+.table-container::-webkit-scrollbar-thumb {
+    background: var(--primary-color);
+    border-radius: 8px;
+}
+
+.table-container::-webkit-scrollbar-thumb:hover {
+    background: var(--secondary-color);
 }
 
 /* Logo */

@@ -128,7 +128,6 @@ const Appointments = () => {
     }
   };
 
-
   useEffect(() => {
     const savedAppointment = localStorage.getItem('selectedAppointment');
     if (savedAppointment) {
@@ -138,7 +137,6 @@ const Appointments = () => {
 
   useEffect(() => {
     if (paid && selectedAppointment) {
-
       axios
         .get(`${API_BASE_URL}/api/appointments/${selectedAppointment._id}`)
         .then((res) => {
@@ -147,7 +145,6 @@ const Appointments = () => {
         .catch((err) => console.error('Error fetching updated appointment:', err));
     }
   }, [paid, selectedAppointment]);
-
 
   return (
     <div className="main-container">
@@ -166,44 +163,48 @@ const Appointments = () => {
           {/* STEP: list */}
           {step === 'list' && (
             <>
-              <h1 className="widget-title">Today's Appointments</h1>
+              <h1 className="widget-title">Available Appointments</h1>
               <p className="widget-content">
                 To check in, find your appointment using your initials, doctor, and time, then click on your row.
               </p>
               {loading ? (
                 <p>Loading...</p>
+              ) : appointments.length === 0 ? (
+                <p className="widget-content">No appointments available for check-in.</p>
               ) : (
-                <table className="appointment-table">
-                  <thead>
-                    <tr>
-                      <th>Appointment Time</th>
-                      <th>Initials</th>
-                      <th>Doctor</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {appointments.map((appointment) => (
-                      <tr
-                        key={appointment._id}
-                        className="appointment-row"
-                        onClick={() => handleRowClick(appointment)}
-                      >
-                        <td>
-                          {new Date(`${appointment.date} ${appointment.time}`).toLocaleTimeString([], {
-                            hour: '2-digit',
-                            minute: '2-digit',
-                          })}
-                        </td>
-                        <td>{getInitials(appointment.patientFirstName, appointment.patientLastName)}</td>
-                        <td>
-                          {appointment.doctorName.startsWith('Dr.')
-                            ? appointment.doctorName
-                            : `Dr. ${appointment.doctorName}`}
-                        </td>
+                <div className="table-container">
+                  <table className="appointment-table">
+                    <thead>
+                      <tr>
+                        <th>Time</th>
+                        <th>Initials</th>
+                        <th>Doctor</th>
                       </tr>
-                    ))}
-                  </tbody>
-                </table>
+                    </thead>
+                    <tbody>
+                      {appointments.map((appointment) => (
+                        <tr
+                          key={appointment._id}
+                          className="appointment-row"
+                          onClick={() => handleRowClick(appointment)}
+                        >
+                          <td>
+                            {new Date(`${appointment.date} ${appointment.time}`).toLocaleTimeString([], {
+                              hour: '2-digit',
+                              minute: '2-digit',
+                            })}
+                          </td>
+                          <td>{getInitials(appointment.patientFirstName, appointment.patientLastName)}</td>
+                          <td>
+                            {appointment.doctorName.startsWith('Dr.')
+                              ? appointment.doctorName
+                              : `Dr. ${appointment.doctorName}`}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
               )}
             </>
           )}

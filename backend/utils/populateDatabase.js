@@ -1,5 +1,3 @@
-// utils/populateDatabase.js
-
 const mongoose = require('mongoose');
 const Appointment = require('../models/Appointment');
 require('dotenv').config();
@@ -20,7 +18,7 @@ const createSampleAppointments = () => {
     },
     {
       patientFirstName: 'Jane',
-      patientLastName: 'Doe',
+      patientLastName: 'Smith',
       doctorName: 'Smith',
       date: demoDate,
       time: '10:00 AM',
@@ -43,7 +41,7 @@ const createSampleAppointments = () => {
       patientLastName: 'Williams',
       doctorName: 'Brown',
       date: demoDate,
-      time: '01:00 PM',
+      time: '02:00 PM',
       dateOfBirth: '1990-01-01',
       patientBalance: '25.50',
       checkedIn: 0,
@@ -53,19 +51,9 @@ const createSampleAppointments = () => {
       patientLastName: 'Miller',
       doctorName: 'Johnson',
       date: demoDate,
-      time: '02:00 PM',
-      dateOfBirth: '1990-01-01',
-      patientBalance: '75.00',
-      checkedIn: 0,
-    },
-    {
-      patientFirstName: 'Mike',
-      patientLastName: 'Davis',
-      doctorName: 'Johnson',
-      date: demoDate,
       time: '03:00 PM',
       dateOfBirth: '1990-01-01',
-      patientBalance: '120.00',
+      patientBalance: '75.00',
       checkedIn: 0,
     }
   ];
@@ -73,26 +61,35 @@ const createSampleAppointments = () => {
 
 const populateDatabase = async () => {
   try {
-    console.log('Checking for demo appointments...');
+    console.log('Initializing demo appointments...');
     
-    // Check if we already have demo appointments
-    const existingCount = await Appointment.countDocuments({ checkedIn: 0 });
+    // Clear ALL appointments first to avoid duplicates
+    await Appointment.deleteMany({});
+    console.log('Cleared all existing appointments');
     
-    if (existingCount === 0) {
-      console.log('No unchecked appointments found. Adding demo appointments...');
-      const sampleAppointments = createSampleAppointments();
-      await Appointment.insertMany(sampleAppointments);
-      console.log('Inserted demo appointments:', sampleAppointments.length);
-    } else {
-      console.log(`Found ${existingCount} existing unchecked appointments. Skipping population.`);
-    }
+    // Add fresh demo appointments
+    const sampleAppointments = createSampleAppointments();
+    await Appointment.insertMany(sampleAppointments);
+    console.log(`Inserted ${sampleAppointments.length} demo appointments`);
     
-    // Log the current count for debugging
-    const totalCount = await Appointment.countDocuments({ checkedIn: 0 });
-    console.log(`Total unchecked appointments available: ${totalCount}`);
+    // Log the appointments for debugging
+    const allAppointments = await Appointment.find({ checkedIn: 0 });
+    console.log(`Total unchecked appointments: ${allAppointments.length}`);
     
   } catch (error) {
     console.error('Error populating database:', error);
+  }
+};
+
+// Reset function to manually clear duplicates
+const resetDatabase = async () => {
+  try {
+    console.log('Resetting database...');
+    await Appointment.deleteMany({});
+    console.log('All appointments cleared');
+    await populateDatabase();
+  } catch (error) {
+    console.error('Error resetting database:', error);
   }
 };
 
@@ -105,7 +102,7 @@ if (require.main === module) {
     })
     .then(async () => {
       console.log('Connected to MongoDB');
-      await populateDatabase();
+      await resetDatabase();
       mongoose.connection.close();
     })
     .catch((error) => {
