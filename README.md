@@ -1,9 +1,9 @@
-# 🦷 Dental Kiosk - Digital Check-in Solution
+# Dental Kiosk - Digital Check-in Solution
 
 **Live Demo**: https://frontend-production-6e9f.up.railway.app/  
 **Source Code**: https://github.com/Adam-Behun/DentalKiosk
 
-## 📋 What is Dental Kiosk?
+## What is Dental Kiosk?
 **Dental Kiosk solutions:**
 - ✅ **Instant self-check-in** - Patients check in themselves in under 2 minutes
 - ✅ **Price transparency** - See exact costs before treatment
@@ -11,7 +11,7 @@
 - ✅ **Reduced staff workload** - Automates routine check-in tasks
 - ✅ **Better patient satisfaction** - Modern, efficient experience
 
-## 🏗️ Technical Architecture
+## Technical Architecture
 
 | Layer | Technology | Purpose |
 |-------|------------|---------|
