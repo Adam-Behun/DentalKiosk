@@ -4,27 +4,15 @@ const mongoose = require('mongoose');
 const Appointment = require('../models/Appointment');
 require('dotenv').config();
 
-// Get today's date in a more reliable way
-const getTodayDate = () => {
-  // Use Railway's timezone (usually UTC) and ensure consistency
-  const today = new Date();
-  return today.toISOString().split('T')[0]; // YYYY-MM-DD format
-};
-
-// Create appointments for multiple days to ensure reliability
 const createSampleAppointments = () => {
-  const today = getTodayDate();
-  const tomorrow = new Date();
-  tomorrow.setDate(tomorrow.getDate() + 1);
-  const tomorrowStr = tomorrow.toISOString().split('T')[0];
-
+  const demoDate = '2025-01-15'; // Fixed date for all demo appointments
+  
   return [
-    // Today's appointments - ALL with DOB 1990-01-01 for demo consistency
     {
       patientFirstName: 'John',
       patientLastName: 'Doe',
       doctorName: 'Smith',
-      date: today,
+      date: demoDate,
       time: '09:00 AM',
       dateOfBirth: '1990-01-01',
       patientBalance: '50.00',
@@ -34,7 +22,7 @@ const createSampleAppointments = () => {
       patientFirstName: 'Jane',
       patientLastName: 'Doe',
       doctorName: 'Smith',
-      date: today,
+      date: demoDate,
       time: '10:00 AM',
       dateOfBirth: '1990-01-01',
       patientBalance: '200.00',
@@ -44,7 +32,7 @@ const createSampleAppointments = () => {
       patientFirstName: 'Alice',
       patientLastName: 'Johnson',
       doctorName: 'Brown',
-      date: today,
+      date: demoDate,
       time: '11:00 AM',
       dateOfBirth: '1990-01-01',
       patientBalance: '150.00',
@@ -54,19 +42,18 @@ const createSampleAppointments = () => {
       patientFirstName: 'Bob',
       patientLastName: 'Williams',
       doctorName: 'Brown',
-      date: today,
+      date: demoDate,
       time: '01:00 PM',
       dateOfBirth: '1990-01-01',
       patientBalance: '25.50',
       checkedIn: 0,
     },
-    // Tomorrow's appointments (backup) - also with consistent DOB
     {
       patientFirstName: 'Sarah',
       patientLastName: 'Miller',
       doctorName: 'Johnson',
-      date: tomorrowStr,
-      time: '09:30 AM',
+      date: demoDate,
+      time: '02:00 PM',
       dateOfBirth: '1990-01-01',
       patientBalance: '75.00',
       checkedIn: 0,
@@ -75,8 +62,8 @@ const createSampleAppointments = () => {
       patientFirstName: 'Mike',
       patientLastName: 'Davis',
       doctorName: 'Johnson',
-      date: tomorrowStr,
-      time: '02:00 PM',
+      date: demoDate,
+      time: '03:00 PM',
       dateOfBirth: '1990-01-01',
       patientBalance: '120.00',
       checkedIn: 0,
@@ -86,20 +73,23 @@ const createSampleAppointments = () => {
 
 const populateDatabase = async () => {
   try {
-    console.log('Populating the database...');
+    console.log('Checking for demo appointments...');
     
-    // Don't clear all appointments - just ensure we have today's appointments
-    const today = getTodayDate();
-    await Appointment.deleteMany({ date: today });
-    console.log(`Cleared appointments for ${today}`);
+    // Check if we already have demo appointments
+    const existingCount = await Appointment.countDocuments({ checkedIn: 0 });
     
-    const sampleAppointments = createSampleAppointments();
-    await Appointment.insertMany(sampleAppointments);
-    console.log('Inserted sample appointments:', sampleAppointments);
+    if (existingCount === 0) {
+      console.log('No unchecked appointments found. Adding demo appointments...');
+      const sampleAppointments = createSampleAppointments();
+      await Appointment.insertMany(sampleAppointments);
+      console.log('Inserted demo appointments:', sampleAppointments.length);
+    } else {
+      console.log(`Found ${existingCount} existing unchecked appointments. Skipping population.`);
+    }
     
     // Log the current count for debugging
-    const todayCount = await Appointment.countDocuments({ date: today, checkedIn: 0 });
-    console.log(`Total unchecked appointments for today (${today}): ${todayCount}`);
+    const totalCount = await Appointment.countDocuments({ checkedIn: 0 });
+    console.log(`Total unchecked appointments available: ${totalCount}`);
     
   } catch (error) {
     console.error('Error populating database:', error);
@@ -116,7 +106,7 @@ if (require.main === module) {
     .then(async () => {
       console.log('Connected to MongoDB');
       await populateDatabase();
-      mongoose.connection.close(); // Only close if script is run independently
+      mongoose.connection.close();
     })
     .catch((error) => {
       console.error('Error connecting to MongoDB:', error);

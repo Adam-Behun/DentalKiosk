@@ -29,15 +29,16 @@ router.patch('/:id', async (req, res) => {
   }
 });
 
-// Fetch today's appointments
+// Fetch available appointments (for demo - shows all unchecked appointments)
 router.get('/today', async (req, res) => {
   try {
-    const today = new Date().toISOString().split('T')[0];
-    const appointments = await Appointment.find({ date: today, checkedIn: 0 }); // Only fetch unchecked-in appointments
+    // For demo purposes, just get ALL unchecked appointments regardless of date
+    const appointments = await Appointment.find({ checkedIn: 0 });
+    console.log(`Returning ${appointments.length} unchecked appointments`);
     res.status(200).json(appointments);
   } catch (error) {
-    console.error("Error fetching today's appointments:", error);
-    res.status(500).json({ message: "Error fetching today's appointments" });
+    console.error("Error fetching appointments:", error);
+    res.status(500).json({ message: "Error fetching appointments" });
   }
 });
 
