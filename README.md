@@ -10,15 +10,14 @@ This is a portfolio project that runs locally. All data in the repo is fictional
 4. **Check-in.** After the code verifies, the frontend marks the appointment `checkedIn: 1` (PATCH `/api/appointments/:id`). It disappears from the kiosk list.
 5. **Cost estimate.** The next screen shows the patient's balance for the visit, read from the `patientBalance` field on the appointment. In this project that is a stored number; no insurance calculation happens. If the balance is zero, the patient just sees a check-in confirmation.
 6. **Stripe payment.** If the balance is above zero, "Pay Now" calls `POST /api/checkout/create-checkout-session`. The backend looks up the balance itself (the amount is never taken from the browser), creates a Stripe Checkout session in USD, and the patient is redirected to Stripe's hosted page.
-7. **Payment confirmation.** Stripe redirects back to `/appointments?step=success&paid=true`. A webhook endpoint (`POST /webhook`) verifies Stripe's signature and logs `checkout.session.completed`.
+7. **Payment confirmation.** Stripe redirects back to `/appointments?step=success&paid=true`, and the page re-fetches the appointment with `GET /api/appointments/:id`. A webhook endpoint (`POST /webhook`) verifies Stripe's signature and logs `checkout.session.completed`.
 
-### Not implemented yet
+### Current limitations
 
-- Staff notification and admission. Check-in only sets the `checkedIn` flag; there is no staff screen, alert, or "admitted" state.
-- The webhook only logs the event. It does not mark the balance as paid.
-- The success page has no dedicated screen, and the frontend's follow-up `GET /api/appointments/:id` has no matching backend route.
-- Date of birth is checked in the browser, and the MFA code store is in memory, so a backend restart invalidates pending codes.
-- The backend re-seeds the appointments collection every time it starts (`utils/populateDatabase.js`), which deletes existing appointments.
+- No staff notification or admission step: check-in only sets the `checkedIn` flag.
+- The webhook verifies and logs `checkout.session.completed` but does not mark the balance as paid.
+- Date of birth is checked in the browser, and MFA codes are held in memory.
+- The backend re-seeds (deletes and recreates) appointments on every start.
 
 ## Architecture
 
@@ -36,7 +35,7 @@ This is a portfolio project that runs locally. All data in the repo is fictional
 
 Prerequisites: Node.js (tested with 22), Docker with Compose, a Stripe account in test mode, and an SMTP account that can send mail.
 
-`docker-compose.yml` defines backend and frontend services, but the Dockerfiles they point to are not in the repo, so only the `mongo` service works. Run MongoDB in Docker and the backend and frontend directly with npm.
+Run MongoDB in Docker and the backend and frontend directly with npm.
 
 1. **Start MongoDB.**
 
@@ -65,10 +64,9 @@ Prerequisites: Node.js (tested with 22), Docker with Compose, a Stripe account i
 
    This replaces all appointments with five fake ones: patients `Test Alpha` through `Test Echo`, all with date of birth 1990-01-01, balances of $50.00, $200.00, $150.00, $25.50 and $0.00, dated today. Phone numbers (555-01xx) and `example.com` emails for them are listed in comments in `scripts/seed.js`.
 
-4. **Start the backend.** The backend reads Stripe's key when its modules load, before `dotenv` runs, so export the `.env` values into your shell first:
+4. **Start the backend.**
 
    ```bash
-   set -a; . ./.env; set +a
    npm start
    ```
 
