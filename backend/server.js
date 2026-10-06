@@ -4,13 +4,13 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const dotenv = require('dotenv');
 
+dotenv.config(); // Load .env variables before any module reads process.env
+
 // Import routes
 const appointmentsRoutes = require('./routes/appointments');
 const checkoutRoutes = require('./routes/checkout');
 const webhookRoutes = require('./routes/webhook');
 const populateDatabase = require('./utils/populateDatabase');
-
-dotenv.config(); // Load .env variables
 
 const app = express();
 
