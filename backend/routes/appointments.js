@@ -42,6 +42,20 @@ router.get('/today', async (req, res) => {
   }
 });
 
+// Fetch a single appointment (used after returning from payment)
+router.get('/:id', async (req, res) => {
+  try {
+    const appointment = await Appointment.findById(req.params.id);
+    if (!appointment) {
+      return res.status(404).json({ message: 'Appointment not found' });
+    }
+    res.status(200).json(appointment);
+  } catch (error) {
+    console.error('Error fetching appointment:', error);
+    res.status(500).json({ message: 'Error fetching appointment' });
+  }
+});
+
 router.post('/checkin', async (req, res) => {
   try {
     const { appointmentId } = req.body;
