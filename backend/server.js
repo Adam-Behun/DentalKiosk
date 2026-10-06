@@ -18,9 +18,7 @@ const app = express();
 const corsOptions = {
   origin: [
     'http://localhost:3000',
-    'http://localhost:3001', 
-    'https://frontend-production-6e9f.up.railway.app',
-    /\.up\.railway\.app$/
+    'http://localhost:3001'
   ],
   methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
@@ -46,7 +44,7 @@ app.use('/api/checkout', checkoutRoutes);
 app.use('/webhook', webhookRoutes);
 
 // Mongo + Server setup
-// Railway provides PORT automatically, fallback to 4000 for local dev
+// PORT can be set in .env; defaults to 4000
 const PORT = parseInt(process.env.PORT) || 4000;
 
 // Retry mechanism for MongoDB connection
