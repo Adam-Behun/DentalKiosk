@@ -89,7 +89,7 @@ Run MongoDB in Docker and the backend and frontend directly with npm.
    npm start
    ```
 
-   Open http://localhost:3000. `.env.local` points the app at `http://localhost:4000`; without it the app falls back to a hard-coded hosted URL.
+   Open http://localhost:3000. `.env.local` sets the backend URL (`http://localhost:4000`, also the default if unset).
 
 7. **Try the flow.** Click "Today's Appointments", choose the row with initials `TA` (Dr. Smith, 09:00 AM), enter date of birth `01/01/1990`, enter any email you can read, type the 6-digit code from that email, and click "Pay Now". On Stripe's page use the test card:
 
